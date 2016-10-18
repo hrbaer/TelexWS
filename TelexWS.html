@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Telex WS</title>
+  <script src="JS/WSClient.js"></script>
+  <script src="JS/TelexWS.js"></script>
+  <script src="JS/UI.js"></script>
+  <link rel="stylesheet" href="UI/TelexWS.css">
+</head>
+<body>
+  
+  <!-- INTERIOR WINDOW -->
+  <div id="window">
+  
+    <!-- TITLE BAR -->
+    <div class="ui-titlebar">
+      <div class="ui-main-title">Telex WS</div>
+      <div id="telex-id" contentEditable="true" spellcheck="false">telex-ws-01</div>
+      <div id="fullscreen-button" class="ui-main-title-button" title="Turn fullscreen display on or off"></div>
+    </div>
+
+    <!-- SIDE PANEL -->
+    <div class="ui-side-panel">
+      <input id="connect-button" class="disconnected" type="button" value="Connect"></input>
+      <div class="ui-spacing"></div>
+      <input id="clear-button" class="standard" type="button" value="Clear display"></input>
+      <div class="ui-spacing"></div>
+      <input id="wry-button" class="standard" type="button" value="Who are you?"></input>
+      <div class="ui-spacing"></div>
+      <div class="ui-line">Participants</div>
+      <div id="participant-list" class="ui-list"></div>
+    </div>
+    
+    <!-- VIEWER -->
+    <div id="viewer">
+      <div class="text-panel">
+        <div class="display" id="display" contentEditable="true"></div>
+      </div>
+    </div>
+    
+    <!-- INFO -->
+    <div class="ui-bottom-panel">
+      <div class="ui-row">
+        <div class="ui-left">Sent bytes</div>
+        <div id="label-sent" class="ui-right">0</div>
+      </div>
+      <div class="ui-row">
+        <div class="ui-left">Received bytes</div>
+        <div id="label-received" class="ui-right">0</div>
+      </div>
+    </div>
+
+    <!-- COPYRIGHT -->
+    <div id="copyright"><a href="http://www.ursamedia.ch/computics" target="_blank">© 2016: Telex WS by H. R. Baer</a></div>
+  </div>
+  
+</body>
+</html>

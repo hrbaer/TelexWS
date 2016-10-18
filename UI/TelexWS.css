@@ -1,0 +1,215 @@
+body {
+  font-family: "Helvetica Neue", sans-serif;
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+}
+
+#window {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.ui-titlebar {
+  display: flex;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  height: 28px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background: linear-gradient(0deg, #dadada, #efefef);
+  border-bottom: 1px solid #ccc;
+}
+
+.ui-main-title {
+  position: relative;
+  font-size: 14pt;
+  font-weight: 600;
+  display: inline-block;
+  margin: auto 0px auto 0px;
+  white-space: nowrap;
+}
+
+#telex-id {
+  position: relative;
+  display: inline-block;
+  margin: auto;
+  white-space: nowrap;
+}
+
+#fullscreen-button {
+  background-image: url(Fullscreen.svg);
+  background-size: 54px 42px;
+}
+
+.ui-main-title-button {
+  background-repeat: no-repeat;
+  background-position: left top;
+  margin: auto 10px auto 0;
+  width: 27px;
+  height: 21px;
+  cursor: pointer;
+}
+
+.ui-main-title-button.on {
+  background-position: right top;
+}
+
+.ui-main-title-button:hover {
+  background-position: bottom left;
+}
+
+.ui-main-title-button.on:hover {
+  background-position: bottom right;
+}
+
+.ui-side-panel {
+  position: absolute;
+  width: 174px;
+  top: 29px;
+  right: 0px;
+  bottom: 0px;
+  overflow-y: scroll;
+  font-size: 10.5pt;
+  font-weight: 300;
+  padding: 10px 15px 10px 10px;
+  background-color: #eee;
+  cursor: default;
+  border-left: 1px solid #ddd;
+}
+
+
+.ui-side-panel > input {
+  width: 100%;
+}
+
+input[type=button] {
+  border-radius: 3px;
+  border-width: 1px;
+  margin: 0;
+  outline: 0;
+}
+
+.ui-list {
+  width: 100%;
+  border-radius: 3px;
+  background-color: #ddd;
+  max-height: 120px;
+  overflow-y: scroll;
+}
+
+.ui-line {
+  margin: 1px 0 1px 0;
+}
+
+.ui-spacing {
+  width: 100%;
+  height: 5px;
+}
+
+.connected {
+  color: white;
+  background-color: #f00;
+}
+
+.disconnected {
+  color: white;
+  background-color: #080;
+}
+
+.standard {
+  color: black;
+  background-color: #eee;
+}
+
+.ui-bottom-panel {
+  position: absolute;
+  width: 174px;
+  height: 40px;
+  right: 0px;
+  bottom: 0px;
+  font-size: 10.5pt;
+  font-weight: 300;
+  padding: 0px 15px 4px 10px;
+  background-color: #eee;
+  cursor: default;
+  border-left: 1px solid #ddd;
+}
+
+.ui-row {
+  width: 100%;
+  display: flex;
+}
+
+.ui-left {
+  display: inline-block;
+  margin-right: auto;
+}
+
+.ui-right {
+  display: inline-block;
+  margin-left: auto;
+}
+
+#viewer {
+  position: absolute;
+  left: 0px;
+  top: 29px;
+  right: 200px;
+  bottom: 0px;
+  font-size: 0;
+  background: #2b2b2b;
+}
+
+.text-panel {
+  position: absolute;
+  overflow-y: scroll;
+  top: 32px;
+  left: 32px;
+  bottom: 32px;
+  right: 32px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 13pt;
+}
+
+#display {
+  position: relative;
+  display: inline;
+  white-space: pre-wrap;
+  color: #0f0;
+  outline: none;
+  cursor: default;
+}
+
+#copyright {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  margin: 2px 5px 4px 5px;
+  font-size: 9.5pt;
+  font-weight: 300;
+}
+
+.ns {
+  -webkit-touch-callout: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+a:link {
+  text-decoration: none;
+  color: black;
+}
+
+a:visited {
+  color: gray;
+}
+
+a:hover {
+  color: orange;
+}
