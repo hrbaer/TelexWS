@@ -12,11 +12,11 @@
   
   <!-- INTERIOR WINDOW -->
   <div id="window">
-  
+
     <!-- TITLE BAR -->
     <div class="ui-titlebar">
       <div class="ui-main-title">Telex WS</div>
-      <div id="telex-id" contentEditable="true" spellcheck="false">telex-ws-01</div>
+      <div id="telex-id" contentEditable="true" spellcheck="false" >telex-ws-01</div>
       <div id="fullscreen-button" class="ui-main-title-button" title="Turn fullscreen display on or off"></div>
     </div>
 
@@ -25,6 +25,8 @@
       <input id="connect-button" class="disconnected" type="button" value="Connect"></input>
       <div class="ui-spacing"></div>
       <input id="clear-button" class="standard" type="button" value="Clear display"></input>
+      <div class="ui-spacing"></div>
+      <input id="reset-button" class="standard" type="button" value="Reset statistics"></input>
       <div class="ui-spacing"></div>
       <input id="wry-button" class="standard" type="button" value="Who are you?"></input>
       <div class="ui-spacing"></div>
@@ -35,7 +37,7 @@
     <!-- VIEWER -->
     <div id="viewer">
       <div class="text-panel">
-        <div class="display" id="display" contentEditable="true"></div>
+        <div class="display" id="display" contentEditable="true" autocorrect="off" autocapitalize="on"></div>
       </div>
     </div>
     
@@ -48,6 +50,10 @@
       <div class="ui-row">
         <div class="ui-left">Received bytes</div>
         <div id="label-received" class="ui-right">0</div>
+      </div>
+      <div class="ui-row">
+        <div class="ui-left">Time elapsed [ms]</div>
+        <div id="label-elapsed" class="ui-right">0</div>
       </div>
     </div>
 

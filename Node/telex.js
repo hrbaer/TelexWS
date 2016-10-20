@@ -25,7 +25,7 @@
       message: function(msg, client, clientID) {
         var jso = JSON.parse(msg);
         // Send key code back
-        if (jso.key) {
+        if (jso.key || jso.txt) {
           clients.forEach(function(c) {
             c.send(msg);
           });

@@ -15,10 +15,12 @@ function WSClient(ws, callback, statistics) {
 
   var connection;
   var sentBytes, receivedBytes;
+  var time;
 
   function send(msg) {
     if (connection) {
       connection.send(msg);
+      time = Date.now();
       sentBytes += msg.length;
       if (statistics) {
         statistics(sentBytes, receivedBytes);
@@ -62,10 +64,13 @@ function WSClient(ws, callback, statistics) {
 
       // Log messages from the server
       connection.onmessage = function (e) {
+        var now = Date.now();
+        var timeElapsed = now - time;
+        time = now;
         callback(e.data);
         receivedBytes += e.data.length;
         if (statistics) {
-          statistics(sentBytes, receivedBytes);
+          statistics(sentBytes, receivedBytes, timeElapsed);
         }
       };
     }
@@ -74,6 +79,13 @@ function WSClient(ws, callback, statistics) {
   function stop() {
     if (connection) {
       connection.close();
+    }
+  }
+  
+  function reset() {
+    sentBytes = receivedBytes = 0;
+    if (statistics) {
+      statistics(sentBytes, receivedBytes, 0);
     }
   }
 
@@ -88,6 +100,9 @@ function WSClient(ws, callback, statistics) {
     },
     send: function(msg) {
       send(msg);
+    },
+    reset: function() {
+      reset();
     }
   }
 

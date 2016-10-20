@@ -29,7 +29,7 @@ window.addEventListener('load', function(evt) {
   // Place text cursor at end
   function placeCaretAtEnd(el) {
     el.focus();
-    if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
+    if (typeof window.getSelection != 'undefined' && typeof document.createRange != 'undefined') {
       var range = document.createRange();
       range.selectNodeContents(el);
       range.collapse(false);
@@ -37,7 +37,7 @@ window.addEventListener('load', function(evt) {
       sel.removeAllRanges();
       sel.addRange(range);
     }
-    else if (typeof document.body.createTextRange != "undefined") {
+    else if (typeof document.body.createTextRange != 'undefined') {
       var textRange = document.body.createTextRange();
       textRange.moveToElementText(el);
       textRange.collapse(false);
@@ -64,9 +64,13 @@ window.addEventListener('load', function(evt) {
   function Statistics() {
     var labelSent = $('#label-sent');
     var labelReceived = $('#label-received');
-    return function(sent, received) {
+    var labelElapsed = $('#label-elapsed');
+    return function(sent, received, elapsed) {
       labelSent.textContent = sent;
       labelReceived.textContent = received;
+      if (elapsed != undefined) {
+        labelElapsed.textContent = elapsed;
+      }
     }
   }
   var showStatistics = Statistics();
@@ -76,6 +80,10 @@ window.addEventListener('load', function(evt) {
   if (telexId) {
     $('#telex-id').textContent = telexId;
   }
+
+
+  var display = document.querySelector('#display');
+  var result = document.querySelector('#result');
 
 
   // Telex id changed
@@ -100,7 +108,7 @@ window.addEventListener('load', function(evt) {
       var id = $('#telex-id').textContent;
       wsClient = WSClient(SERVER + '/' + SCRIPT + '?id=' + id, receiver, showStatistics);
       wsClient.start();
-      $('#display').focus();
+      display.focus();
     }
     else {
       this.value = 'Connect';
@@ -115,6 +123,12 @@ window.addEventListener('load', function(evt) {
   });
 
 
+  // Reset statistics
+  $('#reset-button').addEventListener('click', function(event) {
+    wsClient.reset();
+  });
+
+
   // Who are you button
   $('#wry-button').addEventListener('click', function(event) {
     wsClient.send(JSON.stringify({ cmd: 'wry' }));
@@ -122,15 +136,15 @@ window.addEventListener('load', function(evt) {
 
 
   $('#viewer').addEventListener('click', function(evt) {
-    $('#display').focus();
+    display.focus();
   })
 
   $('#viewer').addEventListener('touchstart', function(evt) {
-    $('#display').focus();
+    display.focus();
   })
 
 
-  $('#display').addEventListener('keydown', function(evt) {
+  display.addEventListener('keydown', function(evt) {
     if (evt.keyCode == 0x08 && display.textContent.length > 0) {
       wsClient.send(JSON.stringify({ key: evt.keyCode }));
       evt.preventDefault();
@@ -138,7 +152,7 @@ window.addEventListener('load', function(evt) {
     }
   })
 
-  $('#display').addEventListener('keypress', function(evt) {
+  display.addEventListener('keypress', function(evt) {
     if (evt.ctrlKey == false && evt.metaKey == false) {
       wsClient.send(JSON.stringify({ key: evt.keyCode }));
       evt.preventDefault();
@@ -146,17 +160,19 @@ window.addEventListener('load', function(evt) {
     }
   })
 
-
-  var display = document.querySelector('#display');
-  var result = document.querySelector('#result');
+  display.addEventListener('paste', function(evt) {
+    var text = evt.clipboardData.getData('text/plain');
+    wsClient.send(JSON.stringify({ txt: text }));
+    evt.preventDefault();
+    evt.stopPropagation();
+  });
 
 
   // Receive data from Web socket server
   function receiver(data) {
     var msg = JSON.parse(data);
-    console.log(msg);
+    var text = display.textContent;
     if (msg.key !== undefined) {
-      var text = display.textContent;
       switch (msg.key) {
       case 0x08:
         display.textContent = text.substr(0, text.length - 1);
@@ -168,13 +184,14 @@ window.addEventListener('load', function(evt) {
         display.textContent = text + String.fromCharCode(msg.key);
         break;
       }
-      placeCaretAtEnd(display);
+    }
+    else if (msg.txt) {
+      display.textContent = text + msg.txt;
     }
     else if (msg.origin) {
-      console.log(msg.origin);
       fillParticipantList(msg.origin);
     }
-    
+    placeCaretAtEnd(display);
   }
 
 });
