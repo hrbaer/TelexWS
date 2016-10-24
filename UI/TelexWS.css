@@ -177,7 +177,6 @@ input[type=button] {
 
 #display {
   position: relative;
-  display: inline;
   white-space: pre-wrap;
   color: #0f0;
   outline: none;

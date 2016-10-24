@@ -82,8 +82,9 @@ window.addEventListener('load', function(evt) {
   }
 
 
-  var display = document.querySelector('#display');
-  var result = document.querySelector('#result');
+  var display = $('#display');
+  var result = $('#result');
+  var viewer = $('#viewer');
 
 
   // Telex id changed
@@ -125,13 +126,17 @@ window.addEventListener('load', function(evt) {
 
   // Reset statistics
   $('#reset-button').addEventListener('click', function(event) {
-    wsClient.reset();
+    if (wsClient) {
+      wsClient.reset();
+    }
   });
 
 
   // Who are you button
   $('#wry-button').addEventListener('click', function(event) {
-    wsClient.send(JSON.stringify({ cmd: 'wry' }));
+    if (wsClient) {
+      wsClient.send(JSON.stringify({ cmd: 'wry' }));
+    }
   });
 
 
@@ -145,7 +150,7 @@ window.addEventListener('load', function(evt) {
 
 
   display.addEventListener('keydown', function(evt) {
-    if (evt.keyCode == 0x08 && display.textContent.length > 0) {
+    if (wsClient && evt.keyCode == 0x08 && display.textContent.length > 0) {
       wsClient.send(JSON.stringify({ key: evt.keyCode }));
       evt.preventDefault();
       evt.stopPropagation();
@@ -153,7 +158,7 @@ window.addEventListener('load', function(evt) {
   })
 
   display.addEventListener('keypress', function(evt) {
-    if (evt.ctrlKey == false && evt.metaKey == false) {
+    if (wsClient && evt.ctrlKey == false && evt.metaKey == false) {
       wsClient.send(JSON.stringify({ key: evt.keyCode }));
       evt.preventDefault();
       evt.stopPropagation();
@@ -161,10 +166,58 @@ window.addEventListener('load', function(evt) {
   })
 
   display.addEventListener('paste', function(evt) {
+    if (!wsClient) { return }
     var text = evt.clipboardData.getData('text/plain');
     wsClient.send(JSON.stringify({ txt: text }));
     evt.preventDefault();
     evt.stopPropagation();
+  });
+
+
+  viewer.addEventListener('dragover', function(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+    evt.dataTransfer.dropEffect = 'copy';
+  });
+
+  viewer.addEventListener('dragenter', function(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+    // document.getElementById('dropScript').classList.add('hilite');
+  });
+
+  viewer.addEventListener('dragleave', function(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+    // document.getElementById('dropScript').classList.remove('hilite');
+  });
+
+  viewer.addEventListener('drop', function(evt) {
+    if (!wsClient) { return }
+    evt.stopPropagation();
+    evt.preventDefault();
+    var files = evt.dataTransfer.files;
+    if (files.length > 0) {
+      for (var i = 0, file; file = files[i]; i++) {
+        if (file.type.match(/text/)) {
+          console.log(file);
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            wsClient.send(JSON.stringify({ txt: e.target.result }));
+          }
+          reader.readAsText(file);
+        }
+        else {
+          alert('Type "' + file.type + '" not supported!');
+        }
+      }
+    }
+    else {
+      var text = evt.dataTransfer.getData('text');
+      if (text) {
+        wsClient.send(JSON.stringify({ txt: text }));
+      }
+    }
   });
 
 
