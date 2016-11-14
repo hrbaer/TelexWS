@@ -15,8 +15,8 @@ window.addEventListener('load', function(evt) {
 
   console.log('Telex JS', new Date());
 
-  const SERVER = 'ws://www.ursamedia.ch:8080';
-  // const SERVER = 'ws://localhost:8080';
+  // const SERVER = 'ws://www.ursamedia.ch:8080';
+  const SERVER = 'ws://localhost:8080';
 
   const SCRIPT = 'telex.js';
 
@@ -107,7 +107,7 @@ window.addEventListener('load', function(evt) {
     if (this.classList.contains('connected')) {
       this.value = 'Disconnect';
       var id = $('#telex-id').textContent;
-      wsClient = WSClient(SERVER + '/' + SCRIPT + '?id=' + id, receiver, showStatistics);
+      wsClient = WSClient(SERVER + '/' + SCRIPT + '?project=' + id, receiver, showStatistics);
       wsClient.start();
       display.focus();
     }

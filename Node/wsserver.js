@@ -10,6 +10,7 @@
   Version history:
   0.1.0 02/10/2016
   1.0.0 18/10/2016
+  1.1.0 14/11/2016 Changes to URL parameters
 */
 
 const MAXCONS = 20;
@@ -22,7 +23,7 @@ var resources = {};
 var counter = 0;
 
 function log(headers, clientID, state, wss) {
-  console.log(headers.origin + '\t' + (new Date()) + '\t' + state + '\t' + clientID + '\t' + wss.clients.length + '\t' + headers['user-agent']);
+  console.log(headers.host + '\t' + (new Date()) + '\t' + state + '\t' + clientID + '\t' + wss.clients.length + '\t' + headers['user-agent']);
 }
 
 function getParams(query) {
@@ -30,7 +31,7 @@ function getParams(query) {
   var plist = query.split('&');
   plist.forEach(function(p) {
     var pair = p.split('=');
-    params[pair[0]] = pair[1];
+    params[pair[0]] = decodeURIComponent(pair[1]);
   });
   return params;
 }
@@ -46,19 +47,20 @@ wss.on('connection', function(client) {
     return;
   }
   
-  log(headers, clientID, 'connect', wss);
-  counter += 1;
-
   var url = client.upgradeReq.url.split('?');
   var params = {};
   if (url.length > 1) {
     params = getParams(url[1]);
   }
-  var id = params['id'];
+  var project = params['project'];
   var key = url[0].substr(1);
-  if (id) {
-    key = key + ' ' + id;
+  if (project) {
+    key = key + ' ' + project;
   }
+  var user = params['user'];
+
+  log(headers, user || clientID, 'connect', wss);
+  counter += 1;
 
   var resource = resources[key];
   if (!resource) {
@@ -66,15 +68,15 @@ wss.on('connection', function(client) {
     var Resource = require(file).Resource;
     resources[key] = resource = Resource(params);
   }
-  resource.connect(client, clientID);
+  resource.connect(client, clientID, user);
 
   client.on('message', function incoming(msg) {
-    resource.message(msg, client, clientID);
+    resource.message(msg, client, clientID, user);
   });
   
   client.on('close', function() {
-    resource.close(client, clientID);
-    log(headers, clientID, 'disconnect', wss);
+    resource.close(client, clientID, user);
+    log(headers, user || clientID, 'disconnect', wss);
   });
   
 });
