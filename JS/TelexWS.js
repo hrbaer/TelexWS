@@ -15,8 +15,8 @@ window.addEventListener('load', function(evt) {
 
   console.log('Telex JS', new Date());
 
-  // const SERVER = 'ws://www.ursamedia.ch:8080';
-  const SERVER = 'ws://localhost:8080';
+  const SERVER = 'ws://www.ursamedia.ch:8080';
+  // const SERVER = 'ws://localhost:8080';
 
   const SCRIPT = 'telex.js';
 
